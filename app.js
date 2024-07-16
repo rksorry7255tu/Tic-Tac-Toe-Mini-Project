@@ -15,21 +15,35 @@ const winPatterns=[
     [3,4,5],
     [6,7,8]
 ];
+let count=0;
 boxes.forEach((box) =>{
+    
     box.addEventListener("click",()=>{
       
         if(turnO===true){
             box.innerText="X";
             turnO=false;
+
         }else{
             box.innerText="O";
+            
             turnO=true;
         }
+        count++;
         box.disabled=true;
-        checkWinner();
+        let iswinner=checkWinner();
+         if(count===9&&!iswinner){
+           
+             showDraw();
+         }
+ 
     });
+    
    
 });
+
+
+
 const enableBoxes =()=>{
     for(let box of boxes){
         box.disabled=false;
@@ -42,8 +56,14 @@ const disableBoxes =()=>{
         box.disabled=true;
     }
 }
+const showDraw=()=>{
+    msg.innerText=`Game Draw`;
+    msgContainer.classList.remove("hide");
+    disableBoxes();
+}
 
 const showWinner=(winner)=>{
+    
     msg.innerText=`Congratulations,Winner is ${winner}`;
     msgContainer.classList.remove("hide");
     disableBoxes();
@@ -58,11 +78,13 @@ const checkWinner=()=>{
 
 
         if(pos1Val !=""&&pos2Val !=""&&pos3Val !=""){
-            if(pos1Val===pos2Val && pos2Val===pos3Val){
-               
+            if(pos1Val===pos2Val && pos2Val===pos3Val){  
                 showWinner(pos1Val);
+                
             }
-        }
+            
+            
+        }  
     }
 };
 
@@ -70,8 +92,9 @@ const resetGame=()=>{
     turnO=true;
     enableBoxes();
     msgContainer.classList.add("hide");
-
+    count=0;
 }
+
 
 newGameBtn.addEventListener("click",resetGame);
 resetbutt.addEventListener("click",resetGame);
